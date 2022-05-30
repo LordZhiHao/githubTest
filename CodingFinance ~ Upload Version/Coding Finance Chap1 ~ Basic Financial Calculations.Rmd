@@ -1,0 +1,90 @@
+---
+title: "Coding Finance Chap1 ~ Basic Financial Calculations"
+author: "LordZhiHao"
+date: '2022-05-30'
+output: html_document
+---
+
+### Basic Financial Calculations
+
+## #BUILD UP
+
+Installing and loading of important libraries:
+
+1. tidyQuant - [WEBSITE](https://cran.r-project.org/web/packages/tidyquant/index.html)
+2. DT - [WEBSITE](https://rstudio.github.io/DT/)
+
+
+``` {r, echo = T, results = 'hide', message = F}
+
+# Install and load libraries
+
+#install.packages("tidyquant")
+#install.packages("DT")
+
+library(tidyquant)
+library(DT)
+library(tidyverse)
+library(dplyr)
+library(magrittr)
+
+options(scipen = 100, 
+        digits = 4)
+
+```
+
+## #1 NET PRESENT VALUES 
+
+Q1 :
+ If we receive $100 per year for the next five years what is the net present value if the current interest rates are 5%. Let us set up our cash flow table.
+ 
+```{r, echo = T, results = 'hide'}
+
+# Create a interest rate variable 
+
+r <- 0.05
+
+# Create a cash flow table 
+
+cfTable <- tribble(~Year, ~Cash_Flow,
+                  2022, 100,
+                  2023, 100,
+                  2024, 100, 
+                  2025, 100,
+                  2026, 100)
+
+cfTable %>% 
+  datatable() %>% 
+  formatRound(columns = 'Cash_Flow',
+                        digits = 2)
+```
+
+# Calculating net present value 
+
+```{r, echo = T, results = 'hide'}
+
+# Calculating present value
+
+cfTable %>% 
+  mutate(present_value = Cash_Flow / (1 + r) ^ (Year - 2021)) %>% 
+  datatable() %>% 
+  formatRound(columns = 'present_value', 
+              digits = 2)
+
+cfTable
+
+# net present value
+
+npv <- cfTable %>% 
+  mutate(present_value = Cash_Flow / (1 + r) ^ (Year - 2021)) %>% 
+  select(present_value) %>%
+  sum()
+
+npv <- round(npv, 2)
+
+```
+
+Net present value is `r npv`. 
+
+
+
