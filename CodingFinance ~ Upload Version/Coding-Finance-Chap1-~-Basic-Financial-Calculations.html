@@ -440,6 +440,33 @@ npv &lt;- cfTable %&gt;%
 npv &lt;- round(npv, 2)</code></pre>
 <p>Net present value is 432.95.</p>
 </div>
+<div id="calculating-present-value-of-finite-annuity" class="section level1">
+<h1>Calculating present value of finite annuity</h1>
+<p>In some cases we have to calculate the present value of stream of
+equal payments. Many times a lottery winner is given the option to get
+the money in equal payments or a lump sum. Let us suppose you win a
+$50000 lottery and you are given two options</p>
+<p>Receive five equal payments of $10000 Lump sum $45000. Let us suppose
+the bank pays 5% interest rate on the deposit.</p>
+<p>At first glance it may appear that five equal payments of $10000 is
+better than $45000. After all $50000 is more than $45000. To solve this
+problem we can calculate the net present value of those payments as
+below.</p>
+<pre class="r"><code># creating the table and variables
+
+pmt &lt;- 10000
+r &lt;- 0.05
+
+cfTable &lt;- tibble(Year = 2022:2026,
+                  pmt = pmt)
+cfTable 
+
+npv &lt;- cfTable %&gt;%
+  mutate(present_value = pmt / (1 + r) ^ (Year - 2021)) %&gt;% 
+  select(present_value) %&gt;%
+  sum()</code></pre>
+<p>The NPV of the annuity is 43294.77.</p>
+</div>
 
 
 
